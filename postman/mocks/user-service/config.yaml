@@ -1,6 +1,0 @@
-version: 1
-mockSrc: default.js
-name: user-service
-description: Local contract-based user-service dependency for Vue E2E tests
-origin: localhost
-interceptRequests: true

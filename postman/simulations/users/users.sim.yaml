@@ -1,8 +1,0 @@
-simulation: users
-routing: path
-mocks:
-  - name: user-service
-    routeKey: user-service
-    origin:
-      - localhost
-    path: postman/mocks/user-service
