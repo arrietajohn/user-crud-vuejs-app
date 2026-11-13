@@ -1,0 +1,30 @@
+purpose:
+  stands_in_for: user-service HTTP API
+  unblocks: Vue browser tests for CRUD and authentication failures without changing live user data
+assumptions:
+  - id: source-contract
+    status: supported
+    claim: The referenced source exposes Bearer login, public creation, protected CRUD, and pending accounts on creation.
+    reason: Controllers, SecurityConfig, UserModel, and LoginService explicitly define these behaviors.
+    verification: Read the public source at revision 33935e0ad31e1fd94822bb91c74da793a5231765 on 2026-11-03. Live deployment behavior has not been established.
+    source: https://github.com/arrietajohn/user-service/tree/33935e0ad31e1fd94822bb91c74da793a5231765/src/main/java/com/jcaa/usersmanagement
+    updated_at: '2026-11-03'
+  - id: local-auth-model
+    status: unknown
+    claim: The mock models authentication sufficiently for the selected client scenarios.
+    reason: The mock decodes local test tokens without verifying signatures and is only intended for local tests. No owner mock was imported because no signed-in Postman workspace was available.
+    verification: On 2026-11-03 (local date), all four Playwright scenarios passed against the local Postman simulation. The mock does not establish cryptographic JWT behavior of the real service.
+    source: postman/mocks/user-service/default.js; tests/e2e/users.spec.ts
+    updated_at: '2026-11-03'
+  - id: client-http-scenarios
+    status: supported
+    claim: The Vue client completes CRUD, persists a session across reload, clears it on protected 401, and retains it on 403 in the local scenarios exercised.
+    reason: Browser assertions passed and the simulation request log confirms the real client traversed login, list, create, detail, update, delete and injected error paths.
+    verification: Four Playwright scenarios passed; inspected simulation.log showing login 200, create 201, detail and update 200, delete 204, protected GET 403 and 401. Registration produced PENDING and subsequent login returned 401. Eight unit tests and the production build also passed. No live authenticated deployment was exercised.
+    source: tests/e2e/users.spec.ts; tests/unit/application.test.ts; postman/simulation.log (local ignored run log)
+    updated_at: '2026-11-03'
+fingerprints:
+  - id: initial
+    date: '2026-11-03'
+    commit: New local application; workspace has no accessible Git metadata
+    cli: Postman CLI 1.80.0; local unsigned session; owner mock search skipped
